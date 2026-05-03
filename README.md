@@ -63,6 +63,7 @@ plus a Node + TypeScript + Vitest + Biome stack-specific CI job.
 - **Language:** TypeScript (strict)
 - **Lint + format:** [Biome](https://biomejs.dev/) (single tool, fast, opinionated)
 - **Tests:** [Vitest](https://vitest.dev/)
+- **ORM + migrations:** [Drizzle](https://orm.drizzle.team/) (SQLite default, Postgres for prod)
 
 The choice mirrors the defaults flagged in
 [`engineering-baseline#choosing-a-stack`](https://github.com/GiveProtocolFoundation/engineering-baseline#choosing-a-stack),
@@ -89,6 +90,39 @@ pnpm test           # Vitest
 ```
 
 If `pnpm` is not installed: `corepack enable && corepack prepare pnpm@9 --activate`.
+
+## Data model
+
+The v0 data model is defined with [Drizzle ORM](https://orm.drizzle.team/),
+with **SQLite as the default** (zero-config local dev) and Postgres as
+the production target. Both dialects share the same logical schema; the
+schema modules live in [`src/db/schema/`](./src/db/schema/) and the
+public surface is [`src/db/index.ts`](./src/db/index.ts).
+
+```bash
+# Generate migration files from the schema (run after schema edits).
+pnpm db:generate            # both dialects
+pnpm db:generate:sqlite     # SQLite only
+pnpm db:generate:postgres   # Postgres only
+
+# Apply migrations to a fresh database.
+pnpm db:migrate:sqlite      # uses ./give-evidence.db by default
+DATABASE_URL=postgres://… pnpm db:migrate:postgres
+
+# Verify generated migrations match the current schema.
+pnpm db:check:sqlite
+pnpm db:check:postgres
+```
+
+The `evidence` table is **append-only** by design — see the comment on
+the schema module. The unique index
+`evidence(grantee_id, source, source_event_id, content_hash)` makes
+adapter retries safely idempotent.
+
+Migration SQL files are committed under
+[`drizzle/sqlite/`](./drizzle/sqlite) and
+[`drizzle/postgres/`](./drizzle/postgres). CI applies them to a fresh
+Postgres in the matrix job.
 
 ## Submitting a change
 

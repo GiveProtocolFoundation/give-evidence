@@ -17,12 +17,27 @@
     "check": "biome check .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:generate:sqlite": "drizzle-kit generate --config=drizzle.sqlite.config.ts",
+    "db:generate:postgres": "drizzle-kit generate --config=drizzle.postgres.config.ts",
+    "db:generate": "pnpm db:generate:sqlite && pnpm db:generate:postgres",
+    "db:migrate:sqlite": "tsx src/db/cli/migrate-sqlite.ts",
+    "db:migrate:postgres": "tsx src/db/cli/migrate-postgres.ts",
+    "db:check:sqlite": "drizzle-kit check --config=drizzle.sqlite.config.ts",
+    "db:check:postgres": "drizzle-kit check --config=drizzle.postgres.config.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@types/better-sqlite3": "7.6.12",
     "@types/node": "20.16.10",
+    "drizzle-kit": "0.30.1",
+    "tsx": "4.19.2",
     "typescript": "5.6.3",
     "vitest": "2.1.9"
+  },
+  "dependencies": {
+    "better-sqlite3": "11.5.0",
+    "drizzle-orm": "0.36.4",
+    "postgres": "3.4.5"
   }
 }
