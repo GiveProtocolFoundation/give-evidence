@@ -32,3 +32,7 @@ logs/
 coverage/
 .coverage
 *.lcov
+
+# Vite / Remix
+.cache/
+.remix/

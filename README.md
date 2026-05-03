@@ -61,34 +61,64 @@ plus a Node + TypeScript + Vitest + Biome stack-specific CI job.
 - **Runtime:** Node.js 20 LTS
 - **Package manager:** pnpm 9
 - **Language:** TypeScript (strict)
-- **Lint + format:** [Biome](https://biomejs.dev/) (single tool, fast, opinionated)
-- **Tests:** [Vitest](https://vitest.dev/)
+- **Web framework:** [Remix v2 (Vite)](https://remix.run/) — see [ADR 0001](./docs/decisions/0001-web-framework.md).
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/).
+- **Lint + format:** [Biome](https://biomejs.dev/) (single tool, fast, opinionated).
+- **Tests:** [Vitest](https://vitest.dev/).
+- **Logging:** [Pino](https://getpino.io/) — structured JSON to stdout.
 
 The choice mirrors the defaults flagged in
 [`engineering-baseline#choosing-a-stack`](https://github.com/GiveProtocolFoundation/engineering-baseline#choosing-a-stack),
 with Biome substituting for the ESLint + Prettier pair to keep the
 toolchain small for early contributors.
 
-## Quickstart
+## Quickstart — Docker Compose (zero local Node setup)
+
+The fastest way to see the v0 web app on a fresh machine. Requires only
+Docker (with the Compose plugin).
 
 ```bash
 git clone https://github.com/GiveProtocolFoundation/give-evidence.git
 cd give-evidence
 
-# Same baseline checks CI runs
-./scripts/check.sh
-
-# Hello-world sanity check
-./scripts/hello.sh
-
-# Stack-specific
-pnpm install
-pnpm lint           # Biome lint
-pnpm format:check   # Biome format check
-pnpm test           # Vitest
+docker compose up --build
+# → http://localhost:3000
 ```
 
-If `pnpm` is not installed: `corepack enable && corepack prepare pnpm@9 --activate`.
+Press `Ctrl+C` to stop, `docker compose down` to clean up.
+
+## Quickstart — local development
+
+For working on the code itself.
+
+```bash
+git clone https://github.com/GiveProtocolFoundation/give-evidence.git
+cd give-evidence
+
+# pnpm 9 (only needed once per machine)
+corepack enable && corepack prepare pnpm@9 --activate
+
+pnpm install
+pnpm dev              # http://localhost:5173 — Vite dev with HMR
+```
+
+Day-to-day commands:
+
+```bash
+pnpm check            # Biome lint + format
+pnpm typecheck        # tsc --noEmit
+pnpm test             # Vitest, run once
+pnpm test:watch       # Vitest, watch mode
+pnpm build            # Production build (output: ./build)
+pnpm start            # Run the production build (port 3000)
+```
+
+Repo-level baseline:
+
+```bash
+./scripts/check.sh    # Same governance checks CI runs
+./scripts/hello.sh    # Trivial sanity check
+```
 
 ## Submitting a change
 
