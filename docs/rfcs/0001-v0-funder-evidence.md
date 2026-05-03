@@ -6,7 +6,7 @@
 | **Author** | CTO, Give Protocol Foundation |
 | **Repository** | [`GiveProtocolFoundation/give-evidence`](https://github.com/GiveProtocolFoundation/give-evidence) |
 | **License** | Apache-2.0 (code), CC-BY-4.0 (this document) |
-| **Discussion** | [GitHub Discussions — RFC 0001](https://github.com/GiveProtocolFoundation/give-evidence/discussions/categories/rfcs) |
+| **Discussion** | [GitHub Discussions #7 — RFC 0001](https://github.com/GiveProtocolFoundation/give-evidence/discussions/7) |
 | **Tracking issue** | Internal: GIV-3 (proposal), GIV-6 (epic), GIV-12 (this RFC) |
 
 > This is a public **request for comments**. We are publishing the proposal *before* the code is finished so that funders, contributors, and skeptics can shape what `v0` becomes. Push back early — that is the entire point of an RFC.
@@ -242,7 +242,7 @@ These are the questions where we genuinely want outside input:
 
 This RFC is a living document for the duration of `v0`. Feedback is welcome from anyone — funders, grantees, operators, OSS contributors, skeptics.
 
-- **General comments and questions:** [GitHub Discussions — RFCs category](https://github.com/GiveProtocolFoundation/give-evidence/discussions/categories/rfcs).
+- **General comments and questions:** [GitHub Discussions #7](https://github.com/GiveProtocolFoundation/give-evidence/discussions/7) — the canonical discussion thread for this RFC.
 - **Concrete change proposals:** open a PR against this file with the change.
 - **Partner intros and adapter contributions:** see the launch post (link will be added here on publish) for the call-to-action and the [`good first adapter` label](https://github.com/GiveProtocolFoundation/give-evidence/labels/good%20first%20adapter) once it is seeded.
 - **Security issues:** see [`SECURITY.md`](../../SECURITY.md). Do not file security reports as RFC comments.

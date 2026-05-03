@@ -12,8 +12,7 @@ shipping it.
 
 - Each RFC is a Markdown file in this directory, numbered sequentially,
   with a stable filename it keeps for life.
-- Discussion happens in [GitHub Discussions →
-  RFCs](https://github.com/GiveProtocolFoundation/give-evidence/discussions/categories/rfcs).
+- Each RFC has a canonical discussion thread under [GitHub Discussions](https://github.com/GiveProtocolFoundation/give-evidence/discussions); the RFC file itself links to its thread.
 - Concrete proposed changes to an in-flight RFC are PRs against the
   file.
 - Status values: `Proposed`, `Accepted`, `Implemented`, `Rejected`,
