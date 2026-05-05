@@ -1,0 +1,26 @@
+# docker-compose.yml — single-service quickstart.
+#
+# Goal: `docker compose up` boots the v0 web app on a fresh box with no
+# extra steps. Database, queues, and other services come in later issues
+# (see GIV-10 for the Drizzle data model).
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: give-evidence:local
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      LOG_LEVEL: info
+      PORT: "3000"
+    restart: unless-stopped
+    # Pino writes JSON to stdout; the default json-file driver is fine for
+    # local. Production deploys swap this for the platform's log shipper.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

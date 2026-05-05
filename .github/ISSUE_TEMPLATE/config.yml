@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/GiveProtocolFoundation/engineering-baseline/security/advisories/new
+    about: Report a security issue privately. Do not open a public issue.
+  - name: Code of Conduct concern
+    url: https://github.com/GiveProtocolFoundation/engineering-baseline/blob/main/CODE_OF_CONDUCT.md
+    about: Read about how to report Code of Conduct concerns.
