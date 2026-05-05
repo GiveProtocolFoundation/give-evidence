@@ -39,7 +39,7 @@ jobs:
 
       - name: Setup pnpm
         # Version is read from "packageManager" in package.json.
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
         uses: actions/setup-node@v4
