@@ -33,8 +33,6 @@ coverage/
 .coverage
 *.lcov
 
-# Local databases
-*.db
-*.db-journal
-*.db-wal
-*.db-shm
+# Vite / Remix
+.cache/
+.remix/
