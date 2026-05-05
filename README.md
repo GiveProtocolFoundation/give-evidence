@@ -31,10 +31,13 @@ What is **out of scope** for v0:
 - Heavyweight identity/KYC. Recipients are referenced by their public
   identifiers (URLs, on-chain addresses, registered org IDs).
 
-The full v0 proposal — including the rationale, success criteria, and
-sequencing — is tracked in our internal Paperclip board on
-[`GIV-3`](https://github.com/GiveProtocolFoundation). When the proposal
-is published as a public RFC, this README will link to it directly.
+The full `v0` proposal — rationale, success criteria, and sequencing —
+is published as a public RFC:
+
+- [**RFC 0001 — v0: Funder-side Accountability Infrastructure**](./docs/rfcs/0001-v0-funder-evidence.md)
+- Discussion: [GitHub Discussions → RFCs](https://github.com/GiveProtocolFoundation/give-evidence/discussions/categories/rfcs)
+
+Feedback, partner intros, and adapter PRs are explicitly invited.
 
 ## Repository status
 
