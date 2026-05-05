@@ -31,10 +31,13 @@ What is **out of scope** for v0:
 - Heavyweight identity/KYC. Recipients are referenced by their public
   identifiers (URLs, on-chain addresses, registered org IDs).
 
-The full v0 proposal — including the rationale, success criteria, and
-sequencing — is tracked in our internal Paperclip board on
-[`GIV-3`](https://github.com/GiveProtocolFoundation). When the proposal
-is published as a public RFC, this README will link to it directly.
+The full `v0` proposal — rationale, success criteria, and sequencing —
+is published as a public RFC:
+
+- [**RFC 0001 — v0: Funder-side Accountability Infrastructure**](./docs/rfcs/0001-v0-funder-evidence.md)
+- Discussion: [GitHub Discussions → RFCs](https://github.com/GiveProtocolFoundation/give-evidence/discussions/categories/rfcs)
+
+Feedback, partner intros, and adapter PRs are explicitly invited.
 
 ## Repository status
 
@@ -119,6 +122,39 @@ Repo-level baseline:
 ./scripts/check.sh    # Same governance checks CI runs
 ./scripts/hello.sh    # Trivial sanity check
 ```
+
+## Data model
+
+The v0 data model is defined with [Drizzle ORM](https://orm.drizzle.team/),
+with **SQLite as the default** (zero-config local dev) and Postgres as
+the production target. Both dialects share the same logical schema; the
+schema modules live in [`src/db/schema/`](./src/db/schema/) and the
+public surface is [`src/db/index.ts`](./src/db/index.ts).
+
+```bash
+# Generate migration files from the schema (run after schema edits).
+pnpm db:generate            # both dialects
+pnpm db:generate:sqlite     # SQLite only
+pnpm db:generate:postgres   # Postgres only
+
+# Apply migrations to a fresh database.
+pnpm db:migrate:sqlite      # uses ./give-evidence.db by default
+DATABASE_URL=postgres://… pnpm db:migrate:postgres
+
+# Verify generated migrations match the current schema.
+pnpm db:check:sqlite
+pnpm db:check:postgres
+```
+
+The `evidence` table is **append-only** by design — see the comment on
+the schema module. The unique index
+`evidence(grantee_id, source, source_event_id, content_hash)` makes
+adapter retries safely idempotent.
+
+Migration SQL files are committed under
+[`drizzle/sqlite/`](./drizzle/sqlite) and
+[`drizzle/postgres/`](./drizzle/postgres). CI applies them to a fresh
+Postgres in the matrix job.
 
 ## Submitting a change
 
