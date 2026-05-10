@@ -1,61 +1,30 @@
 {
-  "name": "give-evidence",
-  "version": "0.0.0",
+  "name": "give-evidence-spike-remix",
   "private": true,
-  "description": "Funder-side accountability infrastructure — v0 wedge for Give Protocol Foundation.",
-  "license": "Apache-2.0",
   "type": "module",
-  "engines": {
-    "node": ">=20"
-  },
-  "packageManager": "pnpm@9.12.0",
-  "sideEffects": false,
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "start": "remix-serve ./build/server/index.js",
-    "lint": "biome lint .",
-    "lint:fix": "biome lint --write .",
-    "format": "biome format --write .",
-    "format:check": "biome format .",
-    "check": "biome check .",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "db:generate:sqlite": "drizzle-kit generate --config=drizzle.sqlite.config.ts",
-    "db:generate:postgres": "drizzle-kit generate --config=drizzle.postgres.config.ts",
-    "db:generate": "pnpm db:generate:sqlite && pnpm db:generate:postgres",
-    "db:migrate:sqlite": "tsx src/db/cli/migrate-sqlite.ts",
-    "db:migrate:postgres": "tsx src/db/cli/migrate-postgres.ts",
-    "db:check:sqlite": "drizzle-kit check --config=drizzle.sqlite.config.ts",
-    "db:check:postgres": "drizzle-kit check --config=drizzle.postgres.config.ts"
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@remix-run/node": "2.15.0",
-    "@remix-run/react": "2.15.0",
-    "@remix-run/serve": "2.15.0",
-    "isbot": "5.1.17",
-    "pino": "9.5.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "@remix-run/node": "^2.15.0",
+    "@remix-run/react": "^2.15.0",
+    "@remix-run/serve": "^2.15.0",
+    "isbot": "^5.1.17",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/better-sqlite3": "7.6.12",
-    "@types/node": "20.16.10",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "autoprefixer": "10.4.20",
-    "postcss": "8.4.49",
-    "tailwindcss": "3.4.14",
-    "typescript": "5.6.3",
-    "vite": "5.4.11",
-    "vite-tsconfig-paths": "5.1.3",
-    "vitest": "2.1.9"
+    "@remix-run/dev": "^2.15.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vite-tsconfig-paths": "^5.1.3"
   },
-  "dependencies": {
-    "better-sqlite3": "11.5.0",
-    "drizzle-orm": "0.36.4",
-    "postgres": "3.4.5"
+  "engines": {
+    "node": ">=20"
   }
 }

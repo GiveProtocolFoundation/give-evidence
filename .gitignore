@@ -1,38 +1,7 @@
-# Editor / OS
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Environment / secrets
+node_modules
+build
+.cache
 .env
 .env.*
 !.env.example
-*.pem
-*.key
-
-# Build / dependency dirs (added per-stack as projects pick a language)
-node_modules/
-dist/
-build/
-target/
-__pycache__/
-*.pyc
-.venv/
-venv/
-
-# Logs
-*.log
-logs/
-
-# Coverage
-coverage/
-.coverage
-*.lcov
-
-# Vite / Remix
-.cache/
-.remix/
+.DS_Store

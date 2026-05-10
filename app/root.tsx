@@ -1,9 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
-
-import tailwindHref from "./tailwind.css?url";
-
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: tailwindHref }];
 
 export default function App() {
   return (
@@ -14,7 +9,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+      <body style={{ fontFamily: "system-ui, sans-serif", lineHeight: 1.5, padding: "2rem" }}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />

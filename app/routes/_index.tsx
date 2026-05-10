@@ -1,52 +1,51 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 
-import { validateAttestation } from "~/lib/attestation";
-import { logger } from "~/lib/logger.server";
-
-// v0 placeholder route. Stand-in for the real attestation submission flow.
-// Exercises the same loader + action + form-first pattern the production
-// adapters will use, against an in-memory dataset.
+// Spike scope:
+// - one loader (SSR-rendered server data)
+// - one form action (progressive-enhancement, no-JS friendly)
+// - validates Remix's form-first UX story for the v0 evidence app
+//
+// Stand-in for an attestation submission: a funder pastes a milestone note,
+// server validates length, persists nothing yet, returns confirmation. This
+// is the shape of the real "Manual Milestone Attestation" adapter flow.
 
 export const meta: MetaFunction = () => [
-  { title: "Give Evidence — v0" },
-  {
-    name: "description",
-    content: "Funder-side accountability infrastructure — v0 skeleton.",
-  },
+  { title: "Give Evidence — Remix spike" },
+  { name: "description", content: "GIV-8 framework spike: SSR + nested routes + form-first UX." },
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  logger.debug({ url: request.url }, "loader: index");
-  return {
-    round: { slug: "v0-round", name: "v0 Demo Round" },
+  // Stand-in for "load a round and its evidence summary". Server-rendered.
+  return json({
+    round: { slug: "spike-round", name: "Spike Round" },
     grantees: [
       { id: "g-1", name: "Open Source Project A", lastEvidenceAt: new Date().toISOString() },
       { id: "g-2", name: "Public Goods Toolkit B", lastEvidenceAt: null },
     ],
     serverNow: new Date().toISOString(),
-  };
+  });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const form = await request.formData();
-  const result = validateAttestation({
-    granteeId: String(form.get("granteeId") ?? ""),
-    note: String(form.get("note") ?? ""),
-  });
+  const granteeId = String(form.get("granteeId") ?? "").trim();
+  const note = String(form.get("note") ?? "").trim();
 
-  if (!result.ok) {
-    logger.info({ fieldErrors: result.fieldErrors }, "attestation: validation failed");
-    return Response.json({ ok: false as const, fieldErrors: result.fieldErrors }, { status: 400 });
+  const fieldErrors: Record<string, string> = {};
+  if (!granteeId) fieldErrors.granteeId = "Pick a grantee.";
+  if (note.length < 10) fieldErrors.note = "Note must be at least 10 characters.";
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return json({ ok: false as const, fieldErrors }, { status: 400 });
   }
 
-  // Real impl persists via Drizzle (GIV-10). v0 skeleton just echoes.
-  const received = { ...result.value, at: new Date().toISOString() };
-  logger.info(
-    { granteeId: result.value.granteeId, noteLength: result.value.note.length },
-    "attestation: received",
-  );
-  return { ok: true as const, received };
+  // Real impl persists via Drizzle; spike just echoes.
+  return json({
+    ok: true as const,
+    received: { granteeId, note, at: new Date().toISOString() },
+  });
 }
 
 export default function Index() {
@@ -54,73 +53,51 @@ export default function Index() {
   const actionData = useActionData<typeof action>();
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-10">
-      <header className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight">Give Evidence — v0</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Round: <strong>{data.round.name}</strong>{" "}
-          <span className="text-slate-400">({data.round.slug})</span>
-        </p>
-        <p className="mt-1 text-xs text-slate-400">SSR rendered at: {data.serverNow}</p>
-      </header>
+    <main style={{ maxWidth: 640 }}>
+      <h1>Give Evidence — Remix spike</h1>
+      <p>
+        Round: <strong>{data.round.name}</strong> ({data.round.slug})
+      </p>
+      <p style={{ color: "#666", fontSize: 14 }}>SSR rendered at: {data.serverNow}</p>
 
-      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-medium">Submit milestone attestation</h2>
-
-        <Form method="post" className="grid gap-4">
-          <label className="grid gap-1">
-            <span className="text-sm font-medium text-slate-700">Grantee</span>
-            <select
-              name="granteeId"
-              defaultValue=""
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
-            >
-              <option value="" disabled>
-                Select a grantee
+      <h2>Submit milestone attestation</h2>
+      <Form method="post" style={{ display: "grid", gap: "0.75rem", maxWidth: 480 }}>
+        <label>
+          <div>Grantee</div>
+          <select name="granteeId" defaultValue="">
+            <option value="" disabled>
+              Select a grantee
+            </option>
+            {data.grantees.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.name}
               </option>
-              {data.grantees.map((g) => (
-                <option key={g.id} value={g.id}>
-                  {g.name}
-                </option>
-              ))}
-            </select>
-            {actionData && !actionData.ok && actionData.fieldErrors.granteeId ? (
-              <small className="text-xs text-red-600">{actionData.fieldErrors.granteeId}</small>
-            ) : null}
-          </label>
+            ))}
+          </select>
+          {actionData && !actionData.ok && actionData.fieldErrors.granteeId ? (
+            <small style={{ color: "crimson" }}>{actionData.fieldErrors.granteeId}</small>
+          ) : null}
+        </label>
 
-          <label className="grid gap-1">
-            <span className="text-sm font-medium text-slate-700">Note</span>
-            <textarea
-              name="note"
-              rows={4}
-              placeholder="What shipped, with a link to evidence."
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
-            />
-            {actionData && !actionData.ok && actionData.fieldErrors.note ? (
-              <small className="text-xs text-red-600">{actionData.fieldErrors.note}</small>
-            ) : null}
-          </label>
+        <label>
+          <div>Note</div>
+          <textarea name="note" rows={4} placeholder="What shipped, with a link to evidence." />
+          {actionData && !actionData.ok && actionData.fieldErrors.note ? (
+            <small style={{ color: "crimson" }}>{actionData.fieldErrors.note}</small>
+          ) : null}
+        </label>
 
-          <div>
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-            >
-              Submit attestation
-            </button>
-          </div>
-        </Form>
+        <div>
+          <button type="submit">Submit attestation</button>
+        </div>
+      </Form>
 
-        {actionData?.ok ? (
-          <aside className="mt-6 rounded-md border border-emerald-200 bg-emerald-50 p-4 text-sm">
-            <strong className="block mb-1 text-emerald-800">Received.</strong>
-            <pre className="whitespace-pre-wrap text-xs text-emerald-900">
-              {JSON.stringify(actionData.received, null, 2)}
-            </pre>
-          </aside>
-        ) : null}
-      </section>
+      {actionData && actionData.ok ? (
+        <section style={{ marginTop: "1.5rem", padding: "0.75rem 1rem", background: "#eef9ee", border: "1px solid #b6e0b6", borderRadius: 6 }}>
+          <strong>Received.</strong>
+          <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(actionData.received, null, 2)}</pre>
+        </section>
+      ) : null}
     </main>
   );
 }
