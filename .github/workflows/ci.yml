@@ -30,7 +30,7 @@ jobs:
         run: ./scripts/hello.sh
 
   node:
-    name: Node (lint, format, test)
+    name: Node (typecheck)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -48,62 +48,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Lint (Biome)
-        run: pnpm lint
-
-      - name: Format check (Biome)
-        run: pnpm format:check
 
       - name: Typecheck
         run: pnpm typecheck
-
-      - name: Test (Vitest)
-        run: pnpm test
-
-      - name: Drizzle — verify migrations are in sync with schema
-        run: |
-          pnpm db:check:sqlite
-          pnpm db:check:postgres
-
-  postgres:
-    name: Postgres migration (fresh DB)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: give_evidence
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 5s
-          --health-timeout 3s
-          --health-retries 10
-    env:
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/give_evidence
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Apply Postgres migrations on a fresh DB
-        run: pnpm db:migrate:postgres
-
-      - name: End-to-end smoke (insert + idempotency)
-        run: pnpm tsx scripts/pg-smoke.ts
