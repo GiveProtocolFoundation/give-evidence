@@ -1,5 +1,6 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "**/.server/**/*.ts", "**/.server/**/*.tsx", "**/.client/**/*.ts", "**/.client/**/*.tsx"],
+  "include": ["app/**/*.ts", "app/**/*.tsx"],
+  "exclude": ["app/**/*.test.ts", "app/lib/logger.server.ts"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["@remix-run/node", "vite/client"],
