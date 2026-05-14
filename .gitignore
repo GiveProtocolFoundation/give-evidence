@@ -5,3 +5,8 @@ build
 .env.*
 !.env.example
 .DS_Store
+.scratch/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
