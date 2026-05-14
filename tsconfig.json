@@ -1,9 +1,18 @@
 {
-  "include": ["app/**/*.ts", "app/**/*.tsx"],
-  "exclude": ["app/**/*.test.ts", "app/lib/logger.server.ts"],
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "src/**/*.ts",
+    "scripts/**/*.ts"
+  ],
+  "exclude": [
+    "app/**/*.test.ts",
+    "app/lib/logger.server.ts",
+    "src/**/*.test.ts"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@remix-run/node", "vite/client"],
+    "types": ["@remix-run/node", "vite/client", "node"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
