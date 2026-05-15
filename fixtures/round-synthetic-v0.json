@@ -1,0 +1,60 @@
+{
+  "funder": "Synthetic Public Goods Foundation",
+  "name": "Synthetic Round — 2026 Q2",
+  "startsAt": "2026-04-01T00:00:00Z",
+  "endsAt": "2026-06-30T23:59:59Z",
+  "currency": "USD",
+  "totalAwarded": "250000",
+  "publicSlug": "synthetic-foundation-2026-q2",
+  "grantees": [
+    {
+      "projectName": "Open Tide",
+      "awardedAmount": "75000",
+      "githubUrls": [
+        "https://github.com/example-org/open-tide-core",
+        "https://github.com/example-org/open-tide-docs"
+      ],
+      "deployUrls": ["https://opentide.example.org"],
+      "osoProjectId": "open-tide",
+      "contactEmail": "lead@opentide.example.org",
+      "milestones": [
+        { "title": "v0.1 alpha", "dueAt": "2026-04-30T00:00:00Z" },
+        { "title": "v0.2 with auth", "dueAt": "2026-05-31T00:00:00Z" }
+      ]
+    },
+    {
+      "projectName": "Quantum Almanac",
+      "awardedAmount": "50000",
+      "githubUrls": ["https://github.com/example-org/quantum-almanac"],
+      "deployUrls": ["https://qa.example.org"],
+      "contactEmail": "maintainers@quantum-almanac.example.org"
+    },
+    {
+      "projectName": "Riverbed Toolkit",
+      "awardedAmount": "60000",
+      "githubUrls": ["https://github.com/riverbed/toolkit"],
+      "deployUrls": [],
+      "osoProjectId": "riverbed-toolkit",
+      "contactEmail": null,
+      "milestones": [
+        { "title": "Docs site live", "dueAt": null }
+      ]
+    },
+    {
+      "projectName": "Coral Index",
+      "awardedAmount": "40000",
+      "githubUrls": ["https://github.com/coralindex/core"],
+      "deployUrls": ["https://coralindex.example.org"],
+      "contactEmail": "core@coralindex.example.org"
+    },
+    {
+      "projectName": "Lighthouse Telemetry",
+      "awardedAmount": "25000",
+      "githubUrls": ["https://github.com/lighthouse/telemetry"],
+      "deployUrls": ["https://telemetry.lighthouse.example.org"],
+      "osoProjectId": null,
+      "contactEmail": "team@lighthouse.example.org",
+      "milestones": []
+    }
+  ]
+}
