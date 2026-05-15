@@ -1,0 +1,33 @@
+# depcheck configuration — see https://github.com/depcheck/depcheck
+#
+# Purpose (GIV-35): catch the merge-clobber pathology where source code imports
+# a package that has been silently removed from package.json. We surface
+# `missing` errors. We also list unused dependencies, but they are advisory —
+# build/test tooling (Remix, Vite, Vitest, drizzle-kit, biome, tsx) is commonly
+# invoked via npm scripts and won't appear in `import` statements.
+
+ignores:
+  # Build/test/CLI tooling invoked by npm scripts, not by import.
+  - "@remix-run/dev"
+  - "@remix-run/serve"
+  - "@types/*"
+  - "depcheck"
+  - "drizzle-kit"
+  - "tsx"
+  - "typescript"
+  - "vite"
+  - "vite-tsconfig-paths"
+  - "vitest"
+  # Used by Remix at SSR time (`isbot()` in app/entry.server.tsx) but missed
+  # by depcheck's static analyzer.
+  - "isbot"
+  # `~` is the tsconfig path alias for `./app/*` (see tsconfig.json `paths`).
+  # Not a package; depcheck treats it as one.
+  - "~"
+
+ignore-patterns:
+  - "build"
+  - "dist"
+  - "node_modules"
+  - "public/build"
+  - "drizzle"

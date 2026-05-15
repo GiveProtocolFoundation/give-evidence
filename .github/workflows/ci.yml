@@ -51,3 +51,58 @@ jobs:
 
       - name: Typecheck
         run: pnpm typecheck
+
+      - name: Dependency gate (depcheck — fail on missing deps)
+        # GIV-35: PR #6 (GIV-9) silently dropped deps that PR #9 (GIV-10) added.
+        # This step fails if any file in `src/` or `scripts/` imports a package
+        # that is not declared in package.json. depcheck also surfaces unused
+        # deps for review; tooling not used via `import` is allow-listed in
+        # `.depcheckrc`.
+        run: pnpm check:deps
+
+      - name: Drizzle — verify migrations are in sync with schema
+        run: |
+          pnpm db:check:sqlite
+          pnpm db:check:postgres
+
+  postgres:
+    name: Postgres migration (fresh DB)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: give_evidence
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/give_evidence
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply Postgres migrations on a fresh DB
+        run: pnpm db:migrate:postgres
+
+      - name: End-to-end smoke (insert + idempotency)
+        run: pnpm tsx scripts/pg-smoke.ts
