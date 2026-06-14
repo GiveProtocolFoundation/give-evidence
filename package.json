@@ -23,7 +23,7 @@
     "import:round": "tsx scripts/import-round.ts"
   },
   "dependencies": {
-    "@remix-run/node": "^2.17.4",
+    "@remix-run/node": "^2.17.5",
     "@remix-run/react": "^2.17.3",
     "@remix-run/serve": "^2.17.4",
     "better-sqlite3": "^12.10.0",
